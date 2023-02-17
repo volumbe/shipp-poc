@@ -1,0 +1,48 @@
+type Location {
+  latitude: Float!
+  longitude: Float!
+}
+
+type Account @model @auth(rules: [{allow: public}, {allow: private}]) {
+  id: ID!
+  user_id: String!
+  first_name: String!
+  last_name: String!
+  is_discoverable: Boolean!
+  profile: Profile @hasOne
+  location: Location
+  current_match: ID
+  Matches: [Match] @manyToMany(relationName: "AccountMatch")
+}
+
+type Profile @model @auth(rules: [{allow: public}, {allow: private}]) {
+  id: ID!
+  birth_date: AWSDate!
+  ethnicities: [String]
+  sexuality: String
+  politics: String
+  about_prompt_1: String
+  about_prompt_2: String
+  weekly_prompt_1: String
+  weekly_prompt_2: String
+}
+
+type Match @model @auth(rules: [{allow: public}, {allow: private}]) {
+  id: ID!
+  account_id_1: ID!
+  account_id_2: ID!
+  accepted_by_1: Boolean
+  accepted_by_2: Boolean
+  cancelled: Boolean
+  cancelled_id: ID
+  arrived_1: Boolean
+  arrived_2: Boolean
+  met: Boolean
+  feedback_1: String
+  feedback_2: String
+  accounts: [Account] @manyToMany(relationName: "AccountMatch")
+  match_deadline: AWSDateTime
+  meetup_deadline: AWSDateTime
+  location: Location
+}
+ 

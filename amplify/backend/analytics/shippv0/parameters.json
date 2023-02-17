@@ -1,0 +1,21 @@
+{
+    "appName": "shippv0",
+    "roleName": "pinpointLambdaRole8f4afeec",
+    "cloudformationPolicyName": "cloudformationPolicy8f4afeec",
+    "cloudWatchPolicyName": "cloudWatchPolicy8f4afeec",
+    "pinpointPolicyName": "pinpointPolicy8f4afeec",
+    "authPolicyName": "pinpoint_amplify_8f4afeec",
+    "unauthPolicyName": "pinpoint_amplify_8f4afeec",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

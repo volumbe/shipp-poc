@@ -1,0 +1,223 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateAccount($filter: ModelSubscriptionAccountFilterInput) {
+  onCreateAccount(filter: $filter) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+subscription OnUpdateAccount($filter: ModelSubscriptionAccountFilterInput) {
+  onUpdateAccount(filter: $filter) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+subscription OnDeleteAccount($filter: ModelSubscriptionAccountFilterInput) {
+  onDeleteAccount(filter: $filter) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+subscription OnCreateProfile($filter: ModelSubscriptionProfileFilterInput) {
+  onCreateProfile(filter: $filter) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateProfile($filter: ModelSubscriptionProfileFilterInput) {
+  onUpdateProfile(filter: $filter) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteProfile($filter: ModelSubscriptionProfileFilterInput) {
+  onDeleteProfile(filter: $filter) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateMatch($filter: ModelSubscriptionMatchFilterInput) {
+  onCreateMatch(filter: $filter) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateMatch($filter: ModelSubscriptionMatchFilterInput) {
+  onUpdateMatch(filter: $filter) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteMatch($filter: ModelSubscriptionMatchFilterInput) {
+  onDeleteMatch(filter: $filter) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}

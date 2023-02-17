@@ -1,0 +1,11 @@
+{
+  "resourceName": "s3shippv0storage86cc7c02",
+  "bucketName": "shipp-v0-storage-86cc7c02",
+  "policyUUID": "dfbe6c43",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ]
+}

@@ -1,0 +1,250 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateAccount(
+  $input: CreateAccountInput!
+  $condition: ModelAccountConditionInput
+) {
+  createAccount(input: $input, condition: $condition) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+mutation UpdateAccount(
+  $input: UpdateAccountInput!
+  $condition: ModelAccountConditionInput
+) {
+  updateAccount(input: $input, condition: $condition) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+mutation DeleteAccount(
+  $input: DeleteAccountInput!
+  $condition: ModelAccountConditionInput
+) {
+  deleteAccount(input: $input, condition: $condition) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+mutation CreateProfile(
+  $input: CreateProfileInput!
+  $condition: ModelProfileConditionInput
+) {
+  createProfile(input: $input, condition: $condition) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation UpdateProfile(
+  $input: UpdateProfileInput!
+  $condition: ModelProfileConditionInput
+) {
+  updateProfile(input: $input, condition: $condition) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation DeleteProfile(
+  $input: DeleteProfileInput!
+  $condition: ModelProfileConditionInput
+) {
+  deleteProfile(input: $input, condition: $condition) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation CreateMatch(
+  $input: CreateMatchInput!
+  $condition: ModelMatchConditionInput
+) {
+  createMatch(input: $input, condition: $condition) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation UpdateMatch(
+  $input: UpdateMatchInput!
+  $condition: ModelMatchConditionInput
+) {
+  updateMatch(input: $input, condition: $condition) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation DeleteMatch(
+  $input: DeleteMatchInput!
+  $condition: ModelMatchConditionInput
+) {
+  deleteMatch(input: $input, condition: $condition) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}

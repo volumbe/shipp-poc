@@ -1,0 +1,249 @@
+# this is an auto generated file. This will be overwritten
+query GetAccount($id: ID!) {
+  getAccount(id: $id) {
+    id
+    user_id
+    first_name
+    last_name
+    is_discoverable
+    profile {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    location {
+      Latitude
+      Longitude
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    accountProfileId
+  }
+}
+query ListAccounts(
+  $filter: ModelAccountFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listAccounts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      user_id
+      first_name
+      last_name
+      is_discoverable
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      accountProfileId
+    }
+    nextToken
+    startedAt
+  }
+}
+query SyncAccounts(
+  $filter: ModelAccountFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncAccounts(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      user_id
+      first_name
+      last_name
+      is_discoverable
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      accountProfileId
+    }
+    nextToken
+    startedAt
+  }
+}
+query GetProfile($id: ID!) {
+  getProfile(id: $id) {
+    id
+    birth_date
+    ethnicities
+    sexuality
+    politics
+    about_prompt_1
+    about_prompt_2
+    weekly_prompt_1
+    weekly_prompt_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+query ListProfiles(
+  $filter: ModelProfileFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query SyncProfiles(
+  $filter: ModelProfileFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncProfiles(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      birth_date
+      ethnicities
+      sexuality
+      politics
+      about_prompt_1
+      about_prompt_2
+      weekly_prompt_1
+      weekly_prompt_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query GetMatch($id: ID!) {
+  getMatch(id: $id) {
+    id
+    account_id_1
+    account_id_2
+    accepted_by_1
+    accepted_by_2
+    cancelled
+    cancelled_id
+    arrived_1
+    arrived_2
+    met
+    feedback_1
+    feedback_2
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+query ListMatches(
+  $filter: ModelMatchFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMatches(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      account_id_1
+      account_id_2
+      accepted_by_1
+      accepted_by_2
+      cancelled
+      cancelled_id
+      arrived_1
+      arrived_2
+      met
+      feedback_1
+      feedback_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
+query SyncMatches(
+  $filter: ModelMatchFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncMatches(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      account_id_1
+      account_id_2
+      accepted_by_1
+      accepted_by_2
+      cancelled
+      cancelled_id
+      arrived_1
+      arrived_2
+      met
+      feedback_1
+      feedback_2
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+    nextToken
+    startedAt
+  }
+}
