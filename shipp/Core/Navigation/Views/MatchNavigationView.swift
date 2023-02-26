@@ -45,11 +45,14 @@ struct MatchNavigationView: View {
                 ZStack {
                     NearbyNavigationView(meetupProgress: $distanceToMatch)
                     VStack {
-                        if distanceToMatch < 50 {
-                            EditPrompt(prompt: $matchModel.otherProfile.prompt_1, editable: false, answeredPrompts: .constant([""]))
-                        }
-                        if distanceToMatch < 20 {
-                            EditPrompt(prompt: $matchModel.otherProfile.prompt_1, editable: false, answeredPrompts: .constant([""]))
+                        if let profile = matchModel.otherProfile {
+                            if distanceToMatch < 50 {
+                                Text(profile.prompt_3?.response ?? "")
+                            }
+                            if distanceToMatch < 25 {
+                                Text(profile.prompt_4?.response ?? "")
+                            }
+//                            EditPrompt(prompt: $matchModel.otherProfile.prompt_1, editable: false, answeredPrompts: .constant([""]))
                         }
                         Spacer()
                         MatchStatus(timeRemainingString: $timeRemainingString, distanceRemainingFeet: $distanceToMatch)
