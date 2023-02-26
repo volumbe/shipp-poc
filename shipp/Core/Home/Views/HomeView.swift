@@ -8,54 +8,72 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var authModel: AuthViewModel
-    @StateObject var viewModel: HomeViewModel = HomeViewModel(userID: "")
+    @EnvironmentObject var authModel: AuthModel
+    @StateObject var viewModel: HomeViewModel = HomeViewModel()
     @StateObject var accountModel: AccountModel = AccountModel()
     @StateObject var profileModel: ProfileModel = ProfileModel()
+    @StateObject var locationManager: LocationManager = LocationManager()
     @StateObject var matchModel: MatchModel = MatchModel()
-    
-    @State private var showProfileCreationView = true
     @State var tabSelection = 1
-    @State var loading = true
-    
+    @State var loading = false
     var body: some View {
         NavigationView {
             VStack {
                 if loading {
                     Text("Loading")
                 }
-                else if showProfileCreationView {
-                    AccountCreationView()
-                }
                 else {
                     TabView(selection: $tabSelection) {
                         SettingsView()
+                            .environmentObject(accountModel)
+                            .environmentObject(profileModel)
                             .tabItem { Text("Settings") }
                             .tag(1)
                         MatchView()
                             .environmentObject(accountModel)
                             .environmentObject(matchModel)
-                            .tabItem { Text("Nearby") }
+                            .environmentObject(locationManager)
+                            .tabItem {
+                                Text("Nearby")
+                            }
                             .tag(2)
                         EditProfileView()
                             .environmentObject(accountModel)
                             .environmentObject(profileModel)
-                            .tabItem { Text("Profile") }
+                            .tabItem {
+                                Text("Profile")
+                            }
+//                            .badge(profileModel.isComplete() ? nil : "!")
                         .tag(3)
                     }
-                    .navigationBarItems(
-                        trailing:
-                            Button("Sign out") {
-                                Task {
-                                    await authModel.signOut()
-                                    authModel.rootAuthView()
-                                }
-                            })
                 }
             }.onAppear {
                 Task {
                     await loadDataStore()
                     loading = false
+                }
+            }
+            .onChange(of: accountModel.hasMatch, perform: { _ in
+                Task {
+                    await loadMatchModel()
+                }
+            })
+            .onChange(of: accountModel.accountID) { id in
+                Task {
+                    await loadMatchModel()
+                    accountModel.image = await accountModel.getImage(accountID: id!)
+                }
+            }
+            .onChange(of: matchModel.otherAccountID) { _ in
+                Task {
+                    print("DEBUG: Loading other account")
+                    await matchModel.getOtherAccount()
+                }
+            }
+            .onChange(of: locationManager.userLocation) { newLocation in
+                guard let newLocation = newLocation else { return }
+                Task {
+                    await accountModel.updateLocation(newLocation)
                 }
             }
         }
@@ -64,40 +82,34 @@ struct HomeView: View {
     
     func loadDataStore() async {
         // Get user, account and profile IDs
-        guard let userID = await authModel.getUser() else {
+        guard let _ = await authModel.getUser() else {
             authModel.rootAuthView()
             return
         }
         
         //TODO: turn following into one line
-        viewModel.userID = userID
+        viewModel.accountID = authModel.accountID
         await viewModel.loadDataStoreIDs()
-        
-        showProfileCreationView = await !viewModel.hasProfile()
-        
+                
         // Start observing account model from DataStore
         guard let accountID = viewModel.accountID else { return }
-        accountModel.observe(accountID)
+        await accountModel.queryAccount(accountID)
+        matchModel.accountID = accountID
         
         // Start observing profile model from DataStore
         guard let profileID = viewModel.profileID else { return }
         profileModel.observe(profileID)
-        
+    }
+    
+    func loadMatchModel() async {
         guard let account = accountModel.account else { return }
-        
-        // Load image from account model
-        await accountModel.getImage()
-        
-        // Start observing match model from DataStore if account has a match
         guard let matchID = account.current_match else { return }
-        matchModel.accountID = accountID
-        matchModel.observe(matchID)
-        
+        matchModel.queryMatch(matchID)
     }
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView().environmentObject(AuthViewModel())
+        HomeView().environmentObject(AuthModel())
     }
 }

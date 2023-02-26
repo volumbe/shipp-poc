@@ -2,7 +2,7 @@
 //  EthnicityView.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/8/23.
+//  Created by Vivek Olumbe on 1/8/23.
 //
 
 import SwiftUI
@@ -11,11 +11,14 @@ struct EthnicityView: View {
     @ObservedObject var viewModel: AccountCreationViewModel
     
     var ethnicities: [String] = [
-    "Black",
-    "White",
-    "Green",
-    "Blue",
-    "Yellow"
+    "American Indian",
+    "Black/African Descent",
+    "East Asian",
+    "South Asian",
+    "Middle Eastern",
+    "Hispanic/Latino",
+    "White/Caucasian",
+    "Other"
     ]
     
     var enableNext : Bool {
@@ -26,10 +29,10 @@ struct EthnicityView: View {
         VStack {
             ForEach(ethnicities, id: \.self) { item in
                 SelectableCapsule(title: item, selectedItems: $viewModel.ethnicities)
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
             }
-            Spacer()
         }
-        .navigationTitle("Ethnicity").navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("What are your ethnicities?").navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(
             trailing:
                 NavigationLink(destination: SexualityView(viewModel: viewModel),

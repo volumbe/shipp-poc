@@ -2,12 +2,12 @@
 //  Prompt.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/14/23.
+//  Created by Vivek Olumbe on 1/14/23.
 //
 
 import SwiftUI
 
-struct Prompt: View {
+struct EditablePrompt: View {
     var title: String
     @Binding var response: String {
         didSet {
@@ -32,11 +32,11 @@ struct Prompt: View {
     }
 }
 
-struct Prompt_Previews: PreviewProvider {
+struct EditablePrompt_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            Prompt(title: "A shower thought I recently had", response: .constant("What if you and I shared our thoughts in the shower together"))
-            Prompt(title: "A shower thought I recently had", response: .constant("What if you and I shared our thoughts in the shower together"))
+            EditablePrompt(title: "A shower thought I recently had", response: .constant("What if you and I shared our thoughts in the shower together"))
+            EditablePrompt(title: "A shower thought I recently had", response: .constant("What if you and I shared our thoughts in the shower together"))
         }
     }
 }

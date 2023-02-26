@@ -15,7 +15,7 @@ import AWSAPIPlugin
 
 @main
 struct ShippApp: App {
-    @StateObject var authModel:AuthViewModel = AuthViewModel()
+    @StateObject var authModel:AuthModel = AuthModel()
     
     init() {
         configureAmplify()

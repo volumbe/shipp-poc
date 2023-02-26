@@ -19,7 +19,6 @@ extension AccountMatch {
     let accountMatch = AccountMatch.keys
     
     model.pluralName = "AccountMatches"
-    
     model.attributes(
       .index(fields: ["accountId"], name: "byAccount"),
       .index(fields: ["matchId"], name: "byMatch"),

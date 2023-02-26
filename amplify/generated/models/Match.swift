@@ -15,7 +15,6 @@ public struct Match: Model {
   public var met: Bool?
   public var feedback_1: String?
   public var feedback_2: String?
-  public var accounts: List<AccountMatch>?
   public var match_deadline: Temporal.DateTime?
   public var meetup_deadline: Temporal.DateTime?
   public var location: Location?
@@ -34,7 +33,6 @@ public struct Match: Model {
       met: Bool? = nil,
       feedback_1: String? = nil,
       feedback_2: String? = nil,
-      accounts: List<AccountMatch>? = [],
       match_deadline: Temporal.DateTime? = nil,
       meetup_deadline: Temporal.DateTime? = nil,
       location: Location? = nil) {
@@ -50,7 +48,6 @@ public struct Match: Model {
       met: met,
       feedback_1: feedback_1,
       feedback_2: feedback_2,
-      accounts: accounts,
       match_deadline: match_deadline,
       meetup_deadline: meetup_deadline,
       location: location,
@@ -69,7 +66,6 @@ public struct Match: Model {
       met: Bool? = nil,
       feedback_1: String? = nil,
       feedback_2: String? = nil,
-      accounts: List<AccountMatch>? = [],
       match_deadline: Temporal.DateTime? = nil,
       meetup_deadline: Temporal.DateTime? = nil,
       location: Location? = nil,
@@ -87,7 +83,6 @@ public struct Match: Model {
       self.met = met
       self.feedback_1 = feedback_1
       self.feedback_2 = feedback_2
-      self.accounts = accounts
       self.match_deadline = match_deadline
       self.meetup_deadline = meetup_deadline
       self.location = location

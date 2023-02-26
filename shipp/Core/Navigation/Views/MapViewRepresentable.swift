@@ -11,18 +11,27 @@ import MapKit
 struct MapViewRepresentable: UIViewRepresentable {
     let mapView = MKMapView()
     @EnvironmentObject var locationManager: MapViewModel
-    @EnvironmentObject var searchViewModel: LocationSearchViewModel
+    @EnvironmentObject var searchViewModel: NavigationViewModel
+    
     
     func makeUIView(context: Context) -> some UIView {
         mapView.delegate = context.coordinator
-        mapView.isRotateEnabled = false
+        mapView.isRotateEnabled = true
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .followWithHeading
         return mapView
     }
     
-    
     func updateUIView(_ uiView: UIViewType, context: Context) {
+        if let coordinate = searchViewModel.selectedLocationCoordinate {
+            withAnimation(.easeInOut) {
+                context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
+                context.coordinator.configurePolyline(withDestinationCoordinate: coordinate)
+            }
+        }
+    }
+    
+    func showLocationDestination(context: Context) {
         if let coordinate = searchViewModel.selectedLocationCoordinate {
             withAnimation(.easeInOut) {
                 context.coordinator.addAndSelectAnnotation(withCoordinate: coordinate)
@@ -57,9 +66,10 @@ extension MapViewRepresentable {
             userLocationCoordinate = userLocation.coordinate
             let center = CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude)
             let span = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001)
-            let region = MKCoordinateRegion(center: center, span: span)
-            
-            parent.mapView.setRegion(region, animated: true)
+//            let region = MKCoordinateRegion(center: center, span: span)
+//
+//            parent.mapView.setRegion(region, animated: true)
+            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
         }
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -85,8 +95,6 @@ extension MapViewRepresentable {
             
             parent.mapView.addAnnotation(annotation)
             parent.mapView.selectAnnotation(annotation, animated: true)
-            
-            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)
         }
         
         func getDestinationRoute(from userLocation: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, completion: @escaping(MKRoute) -> Void) {
@@ -101,16 +109,18 @@ extension MapViewRepresentable {
             let directions = MKDirections(request: request)
             directions.calculate { response, error in
                 if let error = error {
-                    print("DEBUG: Failed to get directions with error \(error)")
+//                    print("DEBUG: Failed to get directions with error \(error)")
                     return
                 }
                 
                 guard let route = response?.routes.first else { return }
                 completion(route)
+//                self.pathIsSet = true
             }
         }
         
         func configurePolyline(withDestinationCoordinate coordinate: CLLocationCoordinate2D) {
+//            if pathIsSet { return }
             withAnimation(.easeOut) {
                 guard let userLocationCoordinate = self.userLocationCoordinate else { return }
                 getDestinationRoute(from: userLocationCoordinate, to: coordinate) { route in
@@ -118,6 +128,10 @@ extension MapViewRepresentable {
                     self.parent.mapView.addOverlay(route.polyline)
                 }
             }
+        }
+        
+        func mapView(_ mapView: MKMapView, didFailToLocateUserWithError error: Error) {
+            print("ERROR: Failed to locate user")
         }
         
     }

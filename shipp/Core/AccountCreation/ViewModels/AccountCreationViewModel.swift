@@ -12,12 +12,16 @@ import Combine
 
 class AccountCreationViewModel: ObservableObject {
     @Published var profile: Profile?
-    @Published var accountID: String = ""
+    @Published var accountID: String?
     @Published var userID: String = ""
     @Published var subscription: AnyCancellable?
     @Published var ethnicities: Set<String> = Set()
     @Published var politics: String = ""
     @Published var sexuality: String = ""
+    @Published var prompt1: String = ""
+    @Published var prompt2: String = ""
+    @Published var prompt3: String = ""
+    @Published var prompt4: String = ""
     @Published var photoImage: UIImage?
     @Published var date: Date = Foundation.Date()
     
@@ -31,13 +35,14 @@ class AccountCreationViewModel: ObservableObject {
     
     func createProfile() async {
         let birthDate = Temporal.Date(date)
+        let ethnicities = Array(ethnicities)
         do {
             guard var account = try await Amplify.DataStore.query(Account.self, where: Account.keys.user_id == userID).first else {
-                print("No account \(accountID)")
+                print("DEBUG: No account \(String(describing: accountID))")
                 return
             }
             self.accountID = account.id
-            let profile = Profile(birth_date: birthDate)
+            let profile = Profile(birth_date: birthDate, ethnicities: ethnicities, sexuality: sexuality, politics: politics)
             let savedProfile = try await Amplify.DataStore.save(profile)
             account.accountProfileId = savedProfile.id
             try await Amplify.DataStore.save(account)
@@ -71,6 +76,7 @@ class AccountCreationViewModel: ObservableObject {
         }
     
     func getProfile() async {
+        guard let accountID = accountID else { return }
         do {
             let result = try await Amplify.DataStore.query(Account.self, byId: accountID)
             guard let account = result else {
@@ -79,7 +85,6 @@ class AccountCreationViewModel: ObservableObject {
             }
             if let profile = account.profile {
                 observeProfile(profileID: profile.id)
-                print(self.profile)
             }
         } catch let error as DataStoreError {
             print("Failed to get account for User \(accountID): ", error)
@@ -99,7 +104,7 @@ class AccountCreationViewModel: ObservableObject {
         
          do {
              let updatedProfile = try await Amplify.DataStore.save(profile)
-             print("Updated post successfully: \(updatedProfile)")
+             print("Updated profile successfully: \(updatedProfile)")
          } catch let error as DataStoreError {
              print("Failed to update post: \(error)")
          } catch {
@@ -109,9 +114,7 @@ class AccountCreationViewModel: ObservableObject {
     }
     
     func uploadPhoto() async {
-        guard let image = photoImage else {
-            return
-        }
+        guard let image = photoImage, let accountID = accountID else { return }
         let imageData = image.jpegData(compressionQuality: 1)
         do {
             let uploadTask = Amplify.Storage.uploadData(
@@ -120,11 +123,11 @@ class AccountCreationViewModel: ObservableObject {
             )
             Task {
                 for await progress in await uploadTask.progress {
-                    print("Progress: \(progress)")
+                    print("DEBUG: Photo upload progress: \(progress)")
                 }
             }
             let value = try await uploadTask.value
-            print("Completed: \(value)")
+            print("DEBUG: Completed photo upload: \(value)")
         } catch {
             print("Error", error)
         }

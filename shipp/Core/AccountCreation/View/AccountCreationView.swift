@@ -2,13 +2,13 @@
 //  AccountCreationView.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/8/23.
+//  Created by Vivek Olumbe on 1/8/23.
 //
 
 import SwiftUI
 
 struct AccountCreationView: View {
-    @EnvironmentObject var authModel: AuthViewModel
+    @EnvironmentObject var authModel: AuthModel
     @ObservedObject var viewModel = AccountCreationViewModel()
     var body: some View {
         NavigationView {
@@ -26,6 +26,6 @@ struct AccountCreationView: View {
 struct AccountCreationView_Previews: PreviewProvider {
     static var previews: some View {
         AccountCreationView()
-            .environmentObject(AuthViewModel())
+            .environmentObject(AuthModel())
     }
 }

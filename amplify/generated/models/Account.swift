@@ -11,7 +11,6 @@ public struct Account: Model {
   public var profile: Profile?
   public var location: Location?
   public var current_match: String?
-  public var Matches: List<AccountMatch>?
   public var createdAt: Temporal.DateTime?
   public var updatedAt: Temporal.DateTime?
   public var accountProfileId: String?
@@ -24,7 +23,6 @@ public struct Account: Model {
       profile: Profile? = nil,
       location: Location? = nil,
       current_match: String? = nil,
-      Matches: List<AccountMatch>? = [],
       accountProfileId: String? = nil) {
     self.init(id: id,
       user_id: user_id,
@@ -34,7 +32,6 @@ public struct Account: Model {
       profile: profile,
       location: location,
       current_match: current_match,
-      Matches: Matches,
       createdAt: nil,
       updatedAt: nil,
       accountProfileId: accountProfileId)
@@ -47,7 +44,6 @@ public struct Account: Model {
       profile: Profile? = nil,
       location: Location? = nil,
       current_match: String? = nil,
-      Matches: List<AccountMatch>? = [],
       createdAt: Temporal.DateTime? = nil,
       updatedAt: Temporal.DateTime? = nil,
       accountProfileId: String? = nil) {
@@ -59,7 +55,6 @@ public struct Account: Model {
       self.profile = profile
       self.location = location
       self.current_match = current_match
-      self.Matches = Matches
       self.createdAt = createdAt
       self.updatedAt = updatedAt
       self.accountProfileId = accountProfileId

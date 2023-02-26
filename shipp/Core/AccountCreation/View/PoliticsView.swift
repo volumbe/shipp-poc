@@ -2,7 +2,7 @@
 //  PoliticsView.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/8/23.
+//  Created by Vivek Olumbe on 1/8/23.
 //
 
 import SwiftUI
@@ -11,7 +11,9 @@ struct PoliticsView: View {
     @ObservedObject var viewModel: AccountCreationViewModel
     var politics: [String] = [
     "Liberal",
+    "Moderate",
     "Conservative",
+    "Nonpolitical",
     "Prefer not to say"
     ]
     
@@ -24,13 +26,15 @@ struct PoliticsView: View {
     
     var body: some View {
         VStack {
-            HStack {
+            VStack {
                 ForEach(politics, id: \.self) { item in
                     SelectableCapsule(title: item, selectedItems: $selectedPolitics, multiSelect: false)
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 5, trailing: 0))
                 }
             }
+            Spacer()
         }
-        .navigationTitle("Politics").navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("What is your political stance?").navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(
             trailing:
                 NavigationLink(destination: ProfilePhotoView(viewModel: viewModel),
@@ -42,7 +46,7 @@ struct PoliticsView: View {
                         if let selection = selectedPolitics.first {
                             viewModel.politics = selection
                         }
-                        await viewModel.updateProfile()
+                        await viewModel.createProfile()
                     }
                 })
                 .disabled(!enableNext)

@@ -2,7 +2,7 @@
 //  SexualityView.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/8/23.
+//  Created by Vivek Olumbe on 1/8/23.
 //
 
 import SwiftUI
@@ -22,6 +22,7 @@ struct SexualityView: View {
     
     var body: some View {
         VStack {
+            Spacer()
             HStack {
                 ForEach(people, id: \.self) { item in
                     SelectableCapsule(title: item, selectedItems: $selectedSexuality, multiSelect: false)
@@ -29,7 +30,7 @@ struct SexualityView: View {
             }
             Spacer()
         }
-        .navigationTitle("Sexuality").navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Who do you want to match with?").navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(
             trailing:
                 NavigationLink(destination: PoliticsView(viewModel: viewModel),

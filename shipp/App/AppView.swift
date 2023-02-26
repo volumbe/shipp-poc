@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AppView: View {
-    @EnvironmentObject var authModel: AuthViewModel
+    @EnvironmentObject var authModel: AuthModel
     @State var isSignedIn = false
     var body: some View {
         Group {
@@ -28,6 +28,6 @@ struct AppView: View {
 
 struct AppView_Previews: PreviewProvider {
     static var previews: some View {
-        AppView().environmentObject(AuthViewModel())
+        AppView().environmentObject(AuthModel())
     }
 }

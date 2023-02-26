@@ -2,13 +2,13 @@
 //  ProfilePhotoView.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/10/23.
+//  Created by Vivek Olumbe on 1/10/23.
 //
 
 import SwiftUI
 
 struct ProfilePhotoView: View {
-    @EnvironmentObject var authModel: AuthViewModel
+    @EnvironmentObject var authModel: AuthModel
     @ObservedObject var viewModel: AccountCreationViewModel
     
     @State private var showPhotoPicker : Bool = false
@@ -28,7 +28,7 @@ struct ProfilePhotoView: View {
             
             Spacer()
         }
-        .navigationTitle("Profile Photo")
+        .navigationTitle("Upload a profile photo")
         .navigationBarItems(
             trailing:
                 NavigationLink(destination: EmptyView(),

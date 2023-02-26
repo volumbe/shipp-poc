@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct SignInView: View {
-    @ObservedObject var viewModel: AuthViewModel
+    @ObservedObject var viewModel: AuthModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack(spacing: 20) {
             TextField("Email", text: $viewModel.email)
-                .textCase(.lowercase)
             SecureField("Password", text: $viewModel.password)
             Button("Sign in", action: {
                 Task {
@@ -38,6 +37,6 @@ struct SignInView: View {
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
-        SignInView(viewModel: AuthViewModel())
+        SignInView(viewModel: AuthModel())
     }
 }

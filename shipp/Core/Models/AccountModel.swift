@@ -2,7 +2,7 @@
 //  AccountModel.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/13/23.
+//  Created by Vivek Olumbe on 1/13/23.
 //
 
 import SwiftUI
@@ -13,52 +13,83 @@ import CoreLocation
 
 final class AccountModel: NSObject, ObservableObject {
     @Published var account: Account?
+    @Published var accountID: String?
     @Published var image: UIImage?
     var subscription: AnyCancellable?
+    var accountSubscription: AnyCancellable?
+    @Published var hasMatch = false
     
-    func observe(_ id: String) {
-         self.subscription = Amplify.Publisher.create(
-             Amplify.DataStore.observeQuery(
-                 for: Account.self,
-                 where: Account.keys.id == id
-             )
-         )
-         .sink { completion in
-             print("Completion event: \(completion)")
-         } receiveValue: { snapshot in
-             guard let account = snapshot.items.first else {
-                 return
-             }
-             DispatchQueue.main.async {
-                 self.account = account
-                 print()
-//                 print("DEBUG: Observing account \(account)")
-                 print()
-             }
-         }
+    func queryAccount(_ id: String) async {
+        self.subscription = Amplify.Publisher.create(
+            Amplify.DataStore.observeQuery(
+                for: Account.self,
+                where: Account.keys.id == id
+            )
+        )
+        .sink { completion in
+            print("Completion event: \(completion)")
+        } receiveValue: { snapshot in
+            guard let account = snapshot.items.first else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.account = account
+                self.accountID = id
+                self.observeAccountModel()
+                print("DEBUG queryAccount(): Observing account \(account)")
+                print()
+            }
+        }
      }
     
-    func getImage() async {
-        guard var account = account else { return }
+    
+    func observeAccountModel() {
+        guard let id = self.accountID else { return }
+        self.accountSubscription = Amplify.Publisher.create(Amplify.DataStore.observe(Account.self))
+        .sink {
+            if case let .failure(error) = $0 {
+                print("ERROR observeAccountModel(): Match's account subscription received error - \(error)")
+            }
+        }
+        receiveValue: { changes in
+            if changes.modelId == id {
+                do {
+                    let updatedAccount = try changes.decodeModel(as: Account.self)
+                    print("DEBUG observeAccountModel(): Account model was updated \(updatedAccount)")
+                    DispatchQueue.main.async {
+                        self.account = updatedAccount
+                        if (updatedAccount.current_match != nil || updatedAccount.current_match != "") {
+                            self.hasMatch = true
+                        }
+                    }
+                } catch {
+                    print("ERROR observeAccountModel(): Failed to decode mutation event - \(error)")
+                }
+            }
+        }
+     }
+    
+    func getImage(accountID: String) async -> UIImage? {
         do {
-            let downloadTask = Amplify.Storage.downloadData(key: account.id)
+            let downloadTask = Amplify.Storage.downloadData(key: accountID)
             Task {
                 for await progress in await downloadTask.progress {
-                    print("Progress: \(progress)")
+                    print("PROGRESS getImage(): \(progress)")
                 }
             }
             let data = try await downloadTask.value
-            self.image = UIImage(data: data)
-            print("Completed: \(data)")
+            return UIImage(data: data)
         } catch let error as StorageError {
             print("ERROR: Failed to get image for account \(error)")
         } catch {
             print("ERROR: \(error)")
         }
+        
+        return nil
     }
     
     func getCurrentMatch() -> String? {
-        guard var account = account else { return nil }
+        guard let account = account else { return nil }
         guard let matchID = account.current_match else { return nil }
         return matchID
     }
@@ -70,12 +101,12 @@ final class AccountModel: NSObject, ObservableObject {
         account.location = location
         
         do {
-            try await Amplify.DataStore.save(account)
-//            print("DEBUG: Updated account with location \(updatedAccount)")
+            let updatedAccount = try await Amplify.DataStore.save(account)
+            print("DEBUG updateLocation(): Updated account with location \(updatedAccount)")
         } catch let error as DataStoreError {
-            print("ERROR: Failed to update account with location \(error)")
+            print("ERROR updateLocation(): Failed to update account with location \(error)")
         } catch {
-            print("ERROR: \(error)")
+            print("ERROR updateLocation(): \(error)")
         }
     }
     

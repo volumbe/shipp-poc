@@ -2,7 +2,7 @@
 //  ProfileModel.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/13/23.
+//  Created by Vivek Olumbe on 1/13/23.
 //
 
 import Amplify
@@ -12,10 +12,11 @@ import CoreLocation
 
 final class ProfileModel: NSObject, ObservableObject {
     @Published var profile: Profile?
-    @Published var prompt1: String = ""
-    @Published var prompt2: String = ""
-    @Published var prompt3: String = ""
-    @Published var prompt4: String = ""
+    @Published var answeredPrompts: Set<String> = Set()
+    @Published var prompt1: Prompt = Prompt(title: "", response: "")
+    @Published var prompt2: Prompt = Prompt(title: "", response: "")
+    @Published var prompt3: Prompt = Prompt(title: "", response: "")
+    @Published var prompt4: Prompt = Prompt(title: "", response: "")
     
     var subscription: AnyCancellable?
     
@@ -35,32 +36,54 @@ final class ProfileModel: NSObject, ObservableObject {
              DispatchQueue.main.async {
                  self.profile = profile
                  self.getPrompts()
-                 print()
-//                 print("DEBUG: Observing account \(profile)")
+                 print("DEBUG: Observing account \(profile)")
                  print()
              }
          }
      }
     
+    
     func getPrompts() {
-        guard let profile = profile else { return }
+        guard var profile = profile else { return }
         
-        prompt1 = profile.about_prompt_1 ?? "Respond to a prompt"
-        prompt2 = profile.about_prompt_2 ?? "Respond to a prompt"
-        prompt3 = profile.weekly_prompt_1 ?? "Respond to a prompt"
-        prompt4 = profile.weekly_prompt_2 ?? "Respond to a prompt"
+        if let prompt1 = profile.prompt_1 {
+            self.prompt1 = prompt1
+            answeredPrompts.insert(prompt3.title)
+        }
+        
+        if let prompt2 = profile.prompt_2 {
+            self.prompt1 = prompt2
+            answeredPrompts.insert(prompt3.title)
+        }
+
+        if let prompt3 = profile.prompt_3 {
+            self.prompt1 = prompt3
+            answeredPrompts.insert(prompt3.title)
+        }
+        if let prompt4 = profile.prompt_4 {
+            self.prompt1 = prompt4
+            answeredPrompts.insert(prompt4.title)
+        }
+
+    }
+    
+    func promptIsNotEmpty(_ prompt: Prompt) -> Bool {
+        return !(prompt.title.trim().isEmpty || prompt.response.trim().isEmpty)
     }
     
     func updatePrompts() async {
         guard var profile = profile else { return }
         
-        profile.about_prompt_1 = prompt1
-        profile.about_prompt_2 = prompt2
-        profile.weekly_prompt_1 = prompt3
-        profile.weekly_prompt_2 = prompt4
+        if promptIsNotEmpty(prompt1) { profile.prompt_1 = prompt1 }
+        if promptIsNotEmpty(prompt2) { profile.prompt_2 = prompt2 }
+        if promptIsNotEmpty(prompt3) { profile.prompt_3 = prompt3 }
+        if promptIsNotEmpty(prompt4) { profile.prompt_4 = prompt4 }
         
         do {
             let updatedProfile = try await Amplify.DataStore.save(profile)
+            DispatchQueue.main.async {
+                self.profile = updatedProfile
+            }
             print("DEBUG: Updated profile prompts \(updatedProfile)")
         } catch let error as DataStoreError {
             print("ERROR: Failed to update profile prompts \(error)")

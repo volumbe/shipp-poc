@@ -5,46 +5,46 @@ import Foundation
 public struct Profile: Model {
   public let id: String
   public var birth_date: Temporal.Date
-  public var ethnicities: [String?]?
-  public var sexuality: String?
-  public var politics: String?
-  public var about_prompt_1: String?
-  public var about_prompt_2: String?
-  public var weekly_prompt_1: String?
-  public var weekly_prompt_2: String?
+  public var ethnicities: [String]
+  public var sexuality: String
+  public var politics: String
+  public var prompt_1: Prompt?
+  public var prompt_2: Prompt?
+  public var prompt_3: Prompt?
+  public var prompt_4: Prompt?
   public var createdAt: Temporal.DateTime?
   public var updatedAt: Temporal.DateTime?
   
   public init(id: String = UUID().uuidString,
       birth_date: Temporal.Date,
-      ethnicities: [String?]? = nil,
-      sexuality: String? = nil,
-      politics: String? = nil,
-      about_prompt_1: String? = nil,
-      about_prompt_2: String? = nil,
-      weekly_prompt_1: String? = nil,
-      weekly_prompt_2: String? = nil) {
+      ethnicities: [String] = [],
+      sexuality: String,
+      politics: String,
+      prompt_1: Prompt? = nil,
+      prompt_2: Prompt? = nil,
+      prompt_3: Prompt? = nil,
+      prompt_4: Prompt? = nil) {
     self.init(id: id,
       birth_date: birth_date,
       ethnicities: ethnicities,
       sexuality: sexuality,
       politics: politics,
-      about_prompt_1: about_prompt_1,
-      about_prompt_2: about_prompt_2,
-      weekly_prompt_1: weekly_prompt_1,
-      weekly_prompt_2: weekly_prompt_2,
+      prompt_1: prompt_1,
+      prompt_2: prompt_2,
+      prompt_3: prompt_3,
+      prompt_4: prompt_4,
       createdAt: nil,
       updatedAt: nil)
   }
   internal init(id: String = UUID().uuidString,
       birth_date: Temporal.Date,
-      ethnicities: [String?]? = nil,
-      sexuality: String? = nil,
-      politics: String? = nil,
-      about_prompt_1: String? = nil,
-      about_prompt_2: String? = nil,
-      weekly_prompt_1: String? = nil,
-      weekly_prompt_2: String? = nil,
+      ethnicities: [String] = [],
+      sexuality: String,
+      politics: String,
+      prompt_1: Prompt? = nil,
+      prompt_2: Prompt? = nil,
+      prompt_3: Prompt? = nil,
+      prompt_4: Prompt? = nil,
       createdAt: Temporal.DateTime? = nil,
       updatedAt: Temporal.DateTime? = nil) {
       self.id = id
@@ -52,10 +52,10 @@ public struct Profile: Model {
       self.ethnicities = ethnicities
       self.sexuality = sexuality
       self.politics = politics
-      self.about_prompt_1 = about_prompt_1
-      self.about_prompt_2 = about_prompt_2
-      self.weekly_prompt_1 = weekly_prompt_1
-      self.weekly_prompt_2 = weekly_prompt_2
+      self.prompt_1 = prompt_1
+      self.prompt_2 = prompt_2
+      self.prompt_3 = prompt_3
+      self.prompt_4 = prompt_4
       self.createdAt = createdAt
       self.updatedAt = updatedAt
   }

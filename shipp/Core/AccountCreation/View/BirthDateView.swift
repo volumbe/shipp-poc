@@ -2,18 +2,20 @@
 //  BirthDateView.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/8/23.
+//  Created by Vivek Olumbe on 1/8/23.
 //
 
 import SwiftUI
 
 struct BirthDateView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var authModel: AuthModel
     @ObservedObject var viewModel: AccountCreationViewModel
     
     
     var body: some View {
         VStack {
+            Spacer()
             DatePicker(
                 "",
                 selection: $viewModel.date,
@@ -24,7 +26,7 @@ struct BirthDateView: View {
             .labelsHidden()
             Spacer()
         }
-        .navigationTitle("Birth Date").navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("What is your birth date?").navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(
             trailing:
                 NavigationLink(destination: EthnicityView(viewModel: self.viewModel),
@@ -33,7 +35,7 @@ struct BirthDateView: View {
                                })
                 .simultaneousGesture(TapGesture().onEnded{
                     Task {
-                        await viewModel.createProfile()
+                        authModel.accountID = viewModel.accountID
                     }
                 })
         )

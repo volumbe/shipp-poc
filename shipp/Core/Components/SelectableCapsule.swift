@@ -2,7 +2,7 @@
 //  EthnicityItem.swift
 //  shipp
 //
-//  Created by Vivek Olumbe on 2/8/23.
+//  Created by Vivek Olumbe on 1/8/23.
 //
 
 import SwiftUI
@@ -18,8 +18,11 @@ struct SelectableCapsule: View {
     
     var body: some View {
         Capsule()
-            .fill(isSelected ? .blue : .red)
-            .overlay(Text(title).multilineTextAlignment(.center))
+            .stroke(Color.accentColor, lineWidth: 5)
+            .overlay {
+                Capsule().fill(isSelected ? Color.accentColor : .white)
+                    .overlay(Text(title).multilineTextAlignment(.center))
+            }
             .frame(width: 125, height: 50)
             .onTapGesture {
                 if isSelected {

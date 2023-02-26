@@ -17,7 +17,6 @@ extension Match {
     case met
     case feedback_1
     case feedback_2
-    case accounts
     case match_deadline
     case meetup_deadline
     case location
@@ -55,7 +54,6 @@ extension Match {
       .field(match.met, is: .optional, ofType: .bool),
       .field(match.feedback_1, is: .optional, ofType: .string),
       .field(match.feedback_2, is: .optional, ofType: .string),
-      .hasMany(match.accounts, is: .optional, ofType: AccountMatch.self, associatedWith: AccountMatch.keys.match),
       .field(match.match_deadline, is: .optional, ofType: .dateTime),
       .field(match.meetup_deadline, is: .optional, ofType: .dateTime),
       .field(match.location, is: .optional, ofType: .embedded(type: Location.self)),

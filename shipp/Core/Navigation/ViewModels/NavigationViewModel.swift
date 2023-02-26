@@ -8,13 +8,14 @@
 import Foundation
 import MapKit
 
-class LocationSearchViewModel: NSObject, ObservableObject {
+class NavigationViewModel: NSObject, ObservableObject {
     
-    //MARK: – Properties
+    //MARK: - Properties
     
     private let searchCompleter = MKLocalSearchCompleter()
     @Published var results = [MKLocalSearchCompletion]()
-    @Published var selectedLocation: MKLocalSearchCompletion?
+    @Published var selectedLocation: CLLocation?
+    @Published var selectedLocalSearch: MKLocalSearchCompletion?
     @Published var selectedLocationCoordinate: CLLocationCoordinate2D?
     
     var queryFragment: String = "Starbucks" {
@@ -23,7 +24,7 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         }
     }
     
-    //MARK: – Lifecycle
+    //MARK: - Lifecycle
     
     override init() {
         super.init()
@@ -31,7 +32,13 @@ class LocationSearchViewModel: NSObject, ObservableObject {
         searchCompleter.queryFragment = queryFragment
     }
     
-    //MARK: – Helpers
+    //MARK: - Helpers
+    
+    func setLocation(_ location: Location) {
+        let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+        self.selectedLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        self.selectedLocationCoordinate = coordinate
+    }
     
     func selectLocation() {
         if results.isEmpty {
@@ -54,7 +61,7 @@ class LocationSearchViewModel: NSObject, ObservableObject {
                 print("DEBUG: Selected Location coordinates \(coordinate)")
             }
         }
-        print("DEBUG: \(String(describing: selectedLocation))")
+        print("DEBUG: \(String(describing: selectedLocalSearch))")
     }
     
     func coordinateSearch(forLocalSearchCompletion localSearch: MKLocalSearchCompletion, completion: @escaping MKLocalSearch.CompletionHandler) {
@@ -69,7 +76,7 @@ class LocationSearchViewModel: NSObject, ObservableObject {
 
 
 // MARK: - MKLocalSearchCompleterDelegate
-extension LocationSearchViewModel: MKLocalSearchCompleterDelegate {
+extension NavigationViewModel: MKLocalSearchCompleterDelegate {
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         self.results = completer.results

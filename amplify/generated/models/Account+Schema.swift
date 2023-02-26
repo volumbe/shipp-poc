@@ -2,7 +2,20 @@
 import Amplify
 import Foundation
 
-extension Account {
+extension Account: Hashable {
+        
+    public var identifier: String {
+         return user_id
+     }
+     
+     public func hash(into hasher: inout Hasher) {
+         return hasher.combine(identifier)
+     }
+    
+    public static func == (lhs: Account, rhs: Account) -> Bool {
+        return lhs.user_id == rhs.user_id
+    }
+    
   // MARK: - CodingKeys 
    public enum CodingKeys: String, ModelKey {
     case id
@@ -13,7 +26,6 @@ extension Account {
     case profile
     case location
     case current_match
-    case Matches
     case createdAt
     case updatedAt
     case accountProfileId
@@ -45,7 +57,6 @@ extension Account {
       .hasOne(account.profile, is: .optional, ofType: Profile.self, associatedWith: Profile.keys.id, targetNames: ["accountProfileId"]),
       .field(account.location, is: .optional, ofType: .embedded(type: Location.self)),
       .field(account.current_match, is: .optional, ofType: .string),
-      .hasMany(account.Matches, is: .optional, ofType: AccountMatch.self, associatedWith: AccountMatch.keys.account),
       .field(account.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(account.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(account.accountProfileId, is: .optional, ofType: .string)

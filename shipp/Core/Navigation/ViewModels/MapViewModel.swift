@@ -25,7 +25,6 @@ final class MapViewModel: NSObject, ObservableObject {
     func updateUserLocation(_ location: CLLocation) {
         self.userLocation = location
         guard let userLocation = userLocation else { return }
-        print("DEBUG: Updated account location \(userLocation)")
     }
     
 }

@@ -25,7 +25,7 @@
       "function": {
         "hellolambda": {
           "deploymentBucketName": "amplify-shippv0-staging-215759-deployment",
-          "s3Key": "amplify-builds/hellolambda-344b6b656b66596d2b74-build.zip"
+          "s3Key": "amplify-builds/hellolambda-574870684c3578645a76-build.zip"
         },
         "notifymatchlambda": {
           "deploymentBucketName": "amplify-shippv0-staging-215759-deployment",

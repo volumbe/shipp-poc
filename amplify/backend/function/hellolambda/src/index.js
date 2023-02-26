@@ -12,7 +12,7 @@ const GRAPHQL_ENDPOINT =
 const GRAPHQL_API_KEY = "da2-7acuw3rtdzgkbigwnzx5qzay5a";
 
 const query = `query DISCOVERABLE_ACCOUNTS {
-    listAccounts(filter: {is_discoverable: {eq: false}}) {
+    listAccounts(filter: {is_discoverable: {eq: true}}) {
       items {
         id
         location {
@@ -47,8 +47,8 @@ const mutation_options = (variables) => {
       "x-api-key": GRAPHQL_API_KEY,
     },
     body: JSON.stringify({ mutation, variables }),
-  }
-}
+  };
+};
 
 const calculate_distance = (coord1, coord2) => {
   const R = 6371e3; // metres
@@ -68,7 +68,7 @@ const calculate_distance = (coord1, coord2) => {
   return d;
 };
 
-const calculate_midpoint = (coord1, coord2) => {
+const calculate_location = (coord1, coord2) => {
   const φ1 = (coord1["latitude"] * Math.PI) / 180; // φ, λ in radians
   const φ2 = (coord2["latitude"] * Math.PI) / 180;
   const λ1 = (coord1["longitude"] * Math.PI) / 180; // φ, λ in radians
@@ -84,50 +84,57 @@ const calculate_midpoint = (coord1, coord2) => {
   const λ3 = λ1 + Math.atan2(By, Math.cos(φ1) + Bx);
 
   let coordinates = {
-    "latitude": φ3,
-    "longitude": λ3
-  }
-  
-  coordinates = {
-    "latitude": φ3*180/Math.PI,
-    "longitude": λ3*180/Math.PI
-  }
+    latitude: φ3,
+    longitude: λ3,
+  };
 
-  return coordinates
+  coordinates = {
+    latitude: (φ3 * 180) / Math.PI,
+    longitude: (λ3 * 180) / Math.PI,
+  };
+
+  return coordinates;
 };
 
 const calculate_matches = (accounts) => {
-    const matchedAccounts = []
-  const matches = []
-  
-    for(var i = 0; i < accounts.length; i++) {
-      let current = accounts[i]
-      if (matchedAccounts.includes(current.id)) { continue; }
-      for (var j = 1; j < accounts.length; j++) {
-        let other = accounts[j]
-        if (current == other || matchedAccounts.includes(other.id)) { continue; }
-        
-        let distance = calculate_distance(current.location, other.location);
-        let midpoint = calculate_midpoint(current.location, other.location);
-        
-        //TODO: Check if distance is less than (1000?) meters
-        let match = {
-          "account_id_1": current.id,
-          "account_id_2": other.id,
-          "distance": distance,
-          "midpoint": midpoint
-        }
-        matchedAccounts.push(current.id)
-        matchedAccounts.push(other.id)
-        matches.push(match)
+  const matchedAccounts = [];
+  const matches = [];
+
+  for (var i = 0; i < accounts.length; i++) {
+    let current = accounts[i];
+    if (matchedAccounts.includes(current.id)) {
+      continue;
+    }
+    for (var j = 1; j < accounts.length; j++) {
+      let other = accounts[j];
+      if (current == other || matchedAccounts.includes(other.id)) {
+        continue;
       }
+
+      let distance = calculate_distance(current.location, other.location);
+      // let location = calculate_location(current.location, other.location);
+      let location = {
+        latitude: 35.78400934354215,
+        longitude: -78.67111623287201,
+      };
+      //TODO: Check if distance is less than (1000?) meters
+      let match = {
+        account_id_1: current.id,
+        account_id_2: other.id,
+        distance: distance,
+        location: location,
+      };
+      matchedAccounts.push(current.id);
+      matchedAccounts.push(other.id);
+      matches.push(match);
     }
-    
-    return {
-      "accounts": matchedAccounts,
-      "matches": matches
-    }
-}
+  }
+
+  return {
+    accounts: matchedAccounts,
+    matches: matches,
+  };
+};
 
 exports.handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);
@@ -154,56 +161,60 @@ exports.handler = async (event) => {
 
   if (body.data) {
     let accounts = body.data.listAccounts.items;
-    
-    let {matchedAccounts, matches} = calculate_matches(accounts);
-    
-    let failedMatches = []
-    let successfulMatches = []
-    
+
+    let { matchedAccounts, matches } = calculate_matches(accounts);
+
+    let failedMatches = [];
+    let successfulMatches = [];
+
     for (var i = 0; i < matches.length; i++) {
-      const match = matches[i]
+      const match = matches[i];
       const variables = {
-        "input": {
-          "account_id_1": match.account_id_1,
-          "account_id_2": match.account_id_2
-        }
-      }
-      console.log(variables)
+        input: {
+          account_id_1: match.account_id_1,
+          account_id_2: match.account_id_2,
+          location: match.location,
+        },
+      };
+      console.log(variables);
       let req_options = {
-          method: "POST",
-          headers: {
-            "x-api-key": GRAPHQL_API_KEY,
-          },
-          body: JSON.stringify({ "query": mutation, "variables": variables }),
-        }
+        method: "POST",
+        headers: {
+          "x-api-key": GRAPHQL_API_KEY,
+        },
+        body: JSON.stringify({ query: mutation, variables: variables }),
+      };
       let mutation_request = new Request(GRAPHQL_ENDPOINT, req_options);
       try {
         let mutation_response = await fetch(mutation_request);
-        console.log(mutation_response)
+        console.log(mutation_response);
         body = await mutation_response.json();
-        console.log(body)
+        console.log(body);
         if (body.errors) statusCode = 400;
-        successfulMatches.push(match)
-      
+        successfulMatches.push(match);
       } catch (err) {
-        console.log(err)
-        error = err
+        console.log(err);
+        error = err;
         statusCode = 400;
         match.error = {
           status: statusCode,
           message: err.message,
           stack: err.stack,
-        }    
-        failedMatches.push(match)
-      } 
-      
+        };
+        failedMatches.push(match);
+      }
     }
-    body = { matchedAccounts: matchedAccounts, matches: matches, successfulMatches: successfulMatches, failedMatches: failedMatches };
+    body = {
+      matchedAccounts: matchedAccounts,
+      matches: matches,
+      successfulMatches: successfulMatches,
+      failedMatches: failedMatches,
+    };
   }
 
   return {
     statusCode,
     body: JSON.stringify(body),
-    error: error
+    error: error,
   };
 };

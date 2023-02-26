@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @ObservedObject var viewModel: AuthViewModel
+    @ObservedObject var viewModel: AuthModel
     @Environment(\.dismiss) var dismiss
     
     @State var showConfirmation : Bool = false
@@ -22,7 +22,6 @@ struct SignUpView: View {
                 }
                 TextField("Email", text: $viewModel.email)
                     .autocorrectionDisabled(true)
-                    .textCase(.lowercase)
                 SecureField("Password", text: $viewModel.password)
                 Button("Sign Up", action: {
                     Task {
@@ -41,7 +40,7 @@ struct SignUpView: View {
                                 print("Signed in")
                                 showConfirmation.toggle()
                                 dismiss()
-                                viewModel.rootHomeView()
+                                viewModel.rootAccountCreationView()
                             }
                         }
                     })
@@ -53,6 +52,6 @@ struct SignUpView: View {
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpView(viewModel: AuthViewModel())
+        SignUpView(viewModel: AuthModel())
     }
 }
